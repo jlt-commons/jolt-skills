@@ -218,8 +218,8 @@ binary only finds it when run from the project directory, unless you add a
 - **Never call raylib off the window's thread** (REPL evals, futures, fibers).
 - `:float` values read back from C (`ffi/read`, ents components, `get-mouse-wheel`)
   are `java.lang.Float`, as on the JVM. `=` with a double is true, but the hash
-  differs, so a set or map keyed by doubles won't find them (on jolt 0.8.25 a
-  small set can even answer differently from a large one). Wrap in
+  differs, so a set or map keyed by doubles may not find them (small and large
+  collections can answer differently, on the JVM too). Wrap in
   `(double ...)` before using them as set members or map keys.
 - Raw bindings (`rl/draw-circle`, `rl/draw-rectangle`) take exact C types:
   ints for positions, doubles for `:float`. A ratio or double where `:int` is
