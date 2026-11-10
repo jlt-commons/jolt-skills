@@ -1,7 +1,6 @@
 # jolt-skills
 
-Agent skills for building apps on [Jolt](https://jolt-lang.net), the Clojure
-implementation on Chez Scheme, with the jolt-lang and jlt-commons library stack.
+Agent skills for building apps on [Jolt](https://jolt-lang.net) with the jolt-lang and jlt-commons library stack.
 
 | Skill | Covers |
 |---|---|
@@ -18,18 +17,12 @@ domain skills assume the `jolt` skill is installed too.
 
 ## Install
 
-Claude Code, for all projects:
+Copy the skill files to wherever your harness looks for them. For example, to install Kimi Code skills, for all projects:
 
 ```bash
 git clone https://github.com/jlt-commons/jolt-skills
-cp -R jolt-skills/jolt* ~/.claude/skills/
+cp -R jolt-skills/jolt* ~/.kimi-code/skills/
 ```
 
-Or per project, into `.claude/skills/`. `jolt-nrepl` needs the jolt-nrepl MCP
+Or per project, into `.kimi-code/skills/`. `jolt-nrepl` needs the jolt-nrepl MCP
 server; see its repo for setup.
-
-## Versions
-
-Library coordinates are pinned to the commits current when the skills were
-written (checked 2026-11-09 against jolt 0.8.25). Re-check before pinning:
-`git ls-remote --tags https://github.com/OWNER/REPO`.
