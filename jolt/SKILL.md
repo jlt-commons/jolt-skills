@@ -1,6 +1,6 @@
 ---
 name: jolt
-description: Build, run, test and ship Clojure projects on Jolt, the Clojure implementation on Chez Scheme (no JVM). Use whenever the user wants to make, scaffold, extend or debug a jolt project, app, library, script, CLI or native binary; mentions jolt, `jolt build`, `jolt.ffi`, `:jolt/native` or jolt tasks; wants to bind a C library from Clojure; or wants a Clojure script/task where babashka would otherwise be used.
+description: "Build, run, test and ship Clojure projects on Jolt, the Clojure implementation on Chez Scheme (no JVM). Use whenever the user wants to make, scaffold, extend or debug a jolt project, app, library, script, CLI or native binary; mentions jolt, `jolt build`, `jolt.ffi`, `:jolt/native` or jolt tasks; wants to bind a C library from Clojure; or wants a Clojure script/task where babashka would otherwise be used."
 ---
 
 # Jolt

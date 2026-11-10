@@ -1,6 +1,6 @@
 ---
 name: jolt-web
-description: Build HTTP servers, JSON APIs and server-rendered or hypermedia web apps on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a web server, REST/JSON API, HTML pages, SSE, websockets, file uploads, TLS, outbound HTTP calls, Datastar live pages, request validation, logging or tracing in a jolt project; or mentions ring-chez-adapter (`ring-chez.adapter/run-server`), jolt-lang/router or reitit on jolt, jolt-lang/http-client (`jolt.http-client`), glimmer-datastar (`jolt.datastar.core`), jolt-lang/multipart, transit-jolt, jolt-lang/logging (`clojure.tools.logging`), jolt-lang/otel, mulog, jolt-lang/crypto, or ring-core, hiccup, Selmer or malli on jolt.
+description: "Build HTTP servers, JSON APIs and server-rendered or hypermedia web apps on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a web server, REST/JSON API, HTML pages, SSE, websockets, file uploads, TLS, outbound HTTP calls, Datastar live pages, request validation, logging or tracing in a jolt project; or mentions ring-chez-adapter (`ring-chez.adapter/run-server`), jolt-lang/router or reitit on jolt, jolt-lang/http-client (`jolt.http-client`), glimmer-datastar (`jolt.datastar.core`), jolt-lang/multipart, transit-jolt, jolt-lang/logging (`clojure.tools.logging`), jolt-lang/otel, mulog, jolt-lang/crypto, or ring-core, hiccup, Selmer or malli on jolt."
 ---
 
 # Jolt web apps

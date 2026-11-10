@@ -1,6 +1,6 @@
 ---
 name: jolt-data
-description: Persistence, databases, data formats and time for Jolt (Clojure on Chez Scheme, no JVM) apps. Use when a jolt program needs SQLite or PostgreSQL (jolt-lang/db, jdbc.core / clojure.jdbc, next.jdbc, honeysql, migratus migrations), Dolt (jolt-lang/doltera), a durable atom persisted to a file or sqlite (jlt-commons/duratom), dates, times, zones and formatting (jolt-lang/time, java.time, juxt/tick), JSON (clojure.data.json), EDN (clojure.edn), YAML (jolt-lang/yaml, clj-yaml), XML (jolt-lang/xml, clojure.xml, clojure.data.xml), Transit (transit-jolt), Fressian (jolt-fressian), or a grammar-based parser (jlt-commons/instaparse). Also when choosing where a jolt app should keep its data.
+description: "Persistence, databases, data formats and time for Jolt (Clojure on Chez Scheme, no JVM) apps. Use when a jolt program needs SQLite or PostgreSQL (jolt-lang/db, jdbc.core / clojure.jdbc, next.jdbc, honeysql, migratus migrations), Dolt (jolt-lang/doltera), a durable atom persisted to a file or sqlite (jlt-commons/duratom), dates, times, zones and formatting (jolt-lang/time, java.time, juxt/tick), JSON (clojure.data.json), EDN (clojure.edn), YAML (jolt-lang/yaml, clj-yaml), XML (jolt-lang/xml, clojure.xml, clojure.data.xml), Transit (transit-jolt), Fressian (jolt-fressian), or a grammar-based parser (jlt-commons/instaparse). Also when choosing where a jolt app should keep its data."
 ---
 
 # jolt-data

@@ -1,6 +1,6 @@
 ---
 name: jolt-gui
-description: Build desktop, terminal and mobile user interfaces on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a GUI app, window, widget tree, TUI, terminal dashboard, iPhone/Android screen, OpenGL pane or macOS .app in a jolt project; or mentions glimmer (glimmer.ratom, glimmer.core, reagent-style ratoms/cursors/reactions), its backends glimmer-gtk, glimmer-appkit, glimmer-qt, glimmer-tui, glimmer-uikit, glimmer-android, glimmer-gl, glimmer-bui; glitter (Replicant-style, glitter.core/set-dispatch!, glitter.gtk/mount!), glitter-core, glitter-uikit, glitter-gl; nexus-jolt (nexus.registry actions/effects/placeholders); or ftxui-jolt (ftxui.core).
+description: "Build desktop, terminal and mobile user interfaces on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a GUI app, window, widget tree, TUI, terminal dashboard, iPhone/Android screen, OpenGL pane or macOS .app in a jolt project; or mentions glimmer (glimmer.ratom, glimmer.core, reagent-style ratoms/cursors/reactions), its backends glimmer-gtk, glimmer-appkit, glimmer-qt, glimmer-tui, glimmer-uikit, glimmer-android, glimmer-gl, glimmer-bui; glitter (Replicant-style, glitter.core/set-dispatch!, glitter.gtk/mount!), glitter-core, glitter-uikit, glitter-gl; nexus-jolt (nexus.registry actions/effects/placeholders); or ftxui-jolt (ftxui.core)."
 ---
 
 # Jolt GUIs

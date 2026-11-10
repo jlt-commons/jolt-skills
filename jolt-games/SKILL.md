@@ -1,6 +1,6 @@
 ---
 name: jolt-games
-description: Build games, graphics, simulations and interactive 2D/3D programs on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a game, game loop, sprite/shape drawing, 3D scene, particle or physics simulation, visualization window, immediate-mode GUI, ECS, sound effects or a game binary in jolt/Clojure; mentions raylib, raylib-jlt (net.b12n.raylib), raygui / raygui-jlt, ents or flecs, slipstream / Slughorn vector rendering, graviton, raylib-jolt-demo, raylib-ios, raylib-android, UPBGE / upbge-jolt, or primitive-math; or wants to live-reload a running game from an nREPL or speed up per-frame Clojure code.
+description: "Build games, graphics, simulations and interactive 2D/3D programs on Jolt (Clojure on Chez Scheme, no JVM). Use when the user wants a game, game loop, sprite/shape drawing, 3D scene, particle or physics simulation, visualization window, immediate-mode GUI, ECS, sound effects or a game binary in jolt/Clojure; mentions raylib, raylib-jlt (net.b12n.raylib), raygui / raygui-jlt, ents or flecs, slipstream / Slughorn vector rendering, graviton, raylib-jolt-demo, raylib-ios, raylib-android, UPBGE / upbge-jolt, or primitive-math; or wants to live-reload a running game from an nREPL or speed up per-frame Clojure code."
 ---
 
 # Games and graphics on jolt
