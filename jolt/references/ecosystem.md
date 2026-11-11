@@ -169,6 +169,7 @@ Use babashka.cli for new code. There is no jolt fork of tools.cli; upstream
 | jlt-commons/jolt-metrics | code metrics, refactoring queue | yes | y |
 | jolt-lang/nrepl | nREPL middleware + cider ops + client | yes | y |
 | jlt-commons/jolt-nrepl-mcp | MCP server: agent in a persistent nREPL | yes | y |
+| jlt-commons/jolt-lsp | LSP + MCP server + JSON CLI: navigation, diagnostics, refactors | yes | y |
 | jlt-commons/nrepl-kimi-code-plugin | same, for Kimi Code | no | y |
 | jlt-commons/setup-jolt, ci-builds | CI (above) | yes (`v1`) / no | CI |
 | jlt-commons/docs-engine | static-site generator for project docs | yes | y |
@@ -414,12 +415,27 @@ Checked: the server with both middlewares, client eval `[3]`, and the
 ### jolt-nrepl-mcp
 
 An MCP server written in jolt that gives an agent a persistent nREPL session:
-`nrepl_eval`, `nrepl_load_file`, `clj_check` (delimiter repair),
-`clj_replace` (structural edit), and `nrepl_start`/`stop`/`status`/
-`interrupt`. It ships as a Claude Code plugin, `jolt-nrepl`, whose skill
-covers the workflow. Install it with
+`nrepl_eval`, `nrepl_load_file`, and `nrepl_start`/`stop`/`connect`/
+`status`/`interrupt`/`disconnect`. Eval and load-file input is syntax-checked
+and safely repaired first (via jolt-lsp's `jolt-lsp.syntax`). Since v0.3.0 the
+standalone `clj_check` and `clj_replace` tools are gone: use jolt-lsp's
+`jolt_check` and `jolt_replace_form`. It ships as a Claude Code plugin,
+`jolt-nrepl`, whose skill covers the workflow. Install it with
 `claude plugin marketplace add <checkout> && claude plugin install jolt-nrepl@jolt-nrepl-mcp`.
 Release binaries don't need jolt installed.
+
+### jolt-lsp
+
+One engine over an in-memory index, with three transports: `jolt-lsp lsp`
+(editors), `jolt-lsp mcp` (agents) and `jolt-lsp --json <command>` (CLI).
+MCP tools: index, search, definition, references, hover (with source),
+symbols, diagnostics (built-in + clj-kondo), call hierarchy, impact, ns deps
+and cycles, forms, context packs, syntax check/repair, rename, clean-ns,
+add-require, structural replace/insert, refactors (sort-requires,
+inline-symbol, destructure-keys, move-form, …), cljfmt formatting, and batch
+reads. Edits preview as diffs and need `apply: true`. Register with
+`claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp`; release
+binaries for macOS arm64 and Linux x86_64. See the `jolt-lsp` skill.
 
 ### docs-engine, awesome-jolt, clojure-test-suite
 

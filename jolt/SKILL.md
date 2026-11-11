@@ -151,8 +151,8 @@ and the current ns, so each step costs one eval, not a process start. Load the
 - `nrepl_start` (pass the project dir as `cwd`) starts or reuses the server;
   `nrepl_eval` then connects lazily via `.nrepl-port`.
 - Try code in `nrepl_eval` first, then write it to the file and
-  `nrepl_load_file` it. Edit forms with `clj_replace` (`load: true` reloads),
-  which matches by structure, not whitespace.
+  `nrepl_load_file` it. Edit forms with jolt-lsp's `jolt_replace_form`
+  (`apply: true` writes), which matches by structure, not whitespace.
 - Run tests in the session: `(require 'x-test :reload) (clojure.test/run-tests 'x-test)`.
   Still run the project's test task as the final gate.
 - Debug by capturing values with an inline `(def x* x)` in a REPL-only
@@ -161,11 +161,18 @@ and the current ns, so each step costs one eval, not a process start. Load the
 - Discover APIs with `clojure.repl/doc`, `apropos`, `dir`, `find-doc`,
   `(meta #'ns/f)` and `macroexpand-1`. There is no `clojure.repl/source`.
 - A dropped trailing paren is auto-closed and reported; other syntax problems
-  come back with line/col before anything runs. `clj_check` does the same for
-  a file (`fix: true` writes safe repairs).
+  come back with line/col before anything runs. jolt-lsp's `jolt_check` does
+  the same for a file (`fix: true` writes safe repairs).
 - The built-in server has no `interrupt`; a timed-out eval drops the
   connection and may still be running. Add `nrepl.middleware/default-middleware`
   for interrupt. Timed-out forms are never replayed.
+
+For navigation and edits, use the `jolt-lsp` MCP tools
+(https://github.com/jlt-commons/jolt-lsp; load the `jolt-lsp` skill):
+`jolt_context` / `jolt_hover` to read a namespace or var, `jolt_definition` /
+`jolt_references` / `jolt_impact` before changing a var, `jolt_rename`,
+`jolt_clean_ns`, `jolt_add_require` and `jolt_refactor` for edits (preview a
+diff, then `apply: true`), and `jolt_diagnostics` after writing a file.
 
 ## Choosing libraries
 

@@ -6,6 +6,7 @@ Agent skills for building apps on [Jolt](https://jolt-lang.net) with the jolt-la
 |---|---|
 | `jolt` | The base: projects, deps.edn, tasks, `jolt build`, FFI, where jolt differs from JVM Clojure, and a catalog of every jolt-lang / jlt-commons library (`jolt/references/ecosystem.md`) |
 | `jolt-nrepl` | REPL-driven work through the [jolt-nrepl-mcp](https://github.com/jlt-commons/jolt-nrepl-mcp) tools |
+| `jolt-lsp` | Navigation, diagnostics, syntax repair, structural edits and refactors through the [jolt-lsp](https://github.com/jlt-commons/jolt-lsp) MCP tools |
 | `jolt-web` | HTTP servers and web apps: ring-chez-adapter, router (reitit), http-client, multipart, glimmer-datastar, transit, logging, otel, mulog, crypto |
 | `jolt-data` | Persistence and formats: db (SQLite/Postgres, next.jdbc, honeysql, migratus), doltera, duratom, time/tick, JSON/EDN/YAML/XML/Transit/Fressian, instaparse |
 | `jolt-gui` | Desktop, terminal and mobile UIs: glimmer and its backends, glitter + nexus, ftxui |
@@ -25,4 +26,5 @@ cp -R jolt-skills/jolt* ~/.kimi-code/skills/
 ```
 
 Or per project, into `.kimi-code/skills/`. `jolt-nrepl` needs the jolt-nrepl MCP
-server; see its repo for setup.
+server and `jolt-lsp` needs the jolt-lsp MCP server (`jolt-lsp mcp`); see their
+repos for setup.
