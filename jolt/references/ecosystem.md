@@ -432,8 +432,12 @@ MCP tools: index, search, definition, references, hover (with source),
 symbols, diagnostics (built-in + clj-kondo), call hierarchy, impact, ns deps
 and cycles, forms, context packs, syntax check/repair, rename, clean-ns,
 add-require, structural replace/insert, refactors (sort-requires,
-inline-symbol, destructure-keys, move-form, …), cljfmt formatting, and batch
-reads. Edits preview as diffs and need `apply: true`. Register with
+inline-symbol, destructure-keys, move-form, …), namespace rename with file
+moves, extraction into a new namespace, declare cleanup, structural diff
+(against text or a git revision), cljfmt formatting, and batch reads. As a
+library: `jolt-lsp.api`, `jolt-lsp.syntax` (check and repair),
+`jolt-lsp.surgeon` (restructuring plans) and `jolt-lsp.sdiff` (structural
+diff); EPL-2.0 with GPL-2.0-or-later as a Secondary License. Edits preview as diffs and need `apply: true`. Register with
 `claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp`; release
 binaries for macOS arm64 and Linux x86_64. See the `jolt-lsp` skill.
 

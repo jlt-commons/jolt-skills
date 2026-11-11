@@ -1,6 +1,6 @@
 ---
 name: jolt-lsp
-description: "Navigate, check and refactor Jolt/Clojure source through the jolt-lsp MCP tools (jolt_index, jolt_context, jolt_definition, jolt_references, jolt_hover, jolt_impact, jolt_diagnostics, jolt_check, jolt_replace_form, jolt_insert_form, jolt_rename, jolt_clean_ns, jolt_add_require, jolt_refactor, jolt_format). Use when working on Jolt or Clojure code and you need to find where something is defined or used, see what a change affects, check or repair syntax, make a structural edit that Edit can't match, rename a var, fix a ns form, or lint a file."
+description: "Navigate, check and refactor Jolt/Clojure source through the jolt-lsp MCP tools (jolt_index, jolt_context, jolt_definition, jolt_references, jolt_hover, jolt_impact, jolt_diagnostics, jolt_check, jolt_replace_form, jolt_insert_form, jolt_rename, jolt_clean_ns, jolt_add_require, jolt_refactor, jolt_format, jolt_rename_namespace, jolt_extract, jolt_fix_declares, jolt_structural_diff). Use when working on Jolt or Clojure code and you need to find where something is defined or used, see what a change affects, check or repair syntax, make a structural edit that Edit can't match, rename a var or a namespace, move forms into a new namespace, fix a ns form, lint a file, or review what a change did form by form."
 ---
 
 # jolt-lsp tools
@@ -52,6 +52,10 @@ Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
 | `jolt_add_require` | `file`, `symbol` (e.g. `clojure.set/union`), `alias`. Returns the `use` form to write. |
 | `jolt_refactor` | `kind`: `sort-requires`, `cycle-keyword`, `inline-symbol`, `destructure-keys`, `restructure-keys`, `move-form` (`target_file`). |
 | `jolt_format` | cljfmt the whole file. |
+| `jolt_rename_namespace` | `from`, `to`. Renames a namespace (or a prefix): its files move to the paths the new name implies, and every ns form, require and qualified reference follows. Returns `moves`, `created`, `deleted`. |
+| `jolt_extract` | `file`, `forms` (names), `to_ns`. Moves those top-level forms, with the private helpers only they use, into a namespace created at the path its name implies. `callers` lists files that still call a moved var; give each a require for the new namespace. |
+| `jolt_fix_declares` | `file`. Drops `declare`s a reordering makes unnecessary by moving each definition above its first use; a declare that breaks a real cycle stays. |
+| `jolt_structural_diff` | `file`, and the old side as `old` (text), `old_file`, or `rev` (git, default `HEAD`). What changed, by form and by where inside it: behaviour changes told apart from renames, extractions, moves, wrapping and comment- or whitespace-only edits, with changed forms grouped by the calls between them. Read-only. |
 | `jolt_batch` | `ops: [{tool, args}]`, read-only tools only. Several lookups in one call. |
 
 ## Workflow
@@ -67,6 +71,21 @@ Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
    when the text matches exactly.
 6. `nrepl_load_file` the file, then `jolt_diagnostics` on it. Fix unused or
    unresolved names with `jolt_clean_ns` / `jolt_add_require`.
+7. Before calling the work done, `jolt_structural_diff` each changed file
+   against `HEAD`: it says which forms changed behaviour and which only
+   moved, were renamed or were reformatted, so an unintended change stands
+   out.
+
+## Restructuring
+
+Use the project-level tools rather than moving text by hand: they rewrite
+every caller at once and refuse a change that would leave a file unreadable.
+To split a namespace, `jolt_extract` the forms (preview, then `apply: true`)
+and add the new require to each file in `callers`. To rename one,
+`jolt_rename_namespace` moves its files too. After either, `jolt_diagnostics`
+on the affected files. The planning library behind them is
+`jolt-lsp.surgeon`, and the diff is `jolt-lsp.sdiff`, if you need them from
+code.
 
 ## Structural replace
 

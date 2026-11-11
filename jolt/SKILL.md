@@ -172,7 +172,9 @@ For navigation and edits, use the `jolt-lsp` MCP tools
 `jolt_context` / `jolt_hover` to read a namespace or var, `jolt_definition` /
 `jolt_references` / `jolt_impact` before changing a var, `jolt_rename`,
 `jolt_clean_ns`, `jolt_add_require` and `jolt_refactor` for edits (preview a
-diff, then `apply: true`), and `jolt_diagnostics` after writing a file.
+diff, then `apply: true`), `jolt_rename_namespace` / `jolt_extract` /
+`jolt_fix_declares` to restructure namespaces, `jolt_diagnostics` after
+writing a file, and `jolt_structural_diff` to review a change form by form.
 
 ## Choosing libraries
 
