@@ -28,3 +28,7 @@ cp -R jolt-skills/jolt* ~/.kimi-code/skills/
 Or per project, into `.kimi-code/skills/`. `jolt-nrepl` needs the jolt-nrepl MCP
 server and `jolt-lsp` needs the jolt-lsp MCP server (`jolt-lsp mcp`); see their
 repos for setup.
+
+## License
+
+EPL 2.0, the same license as Jolt and Clojure. See [LICENSE](LICENSE).
