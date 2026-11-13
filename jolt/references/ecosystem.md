@@ -415,9 +415,15 @@ Checked: the server with both middlewares, client eval `[3]`, and the
 ### jolt-nrepl-mcp
 
 An MCP server written in jolt that gives an agent a persistent nREPL session:
-`nrepl_eval`, `nrepl_load_file`, and `nrepl_start`/`stop`/`connect`/
-`status`/`interrupt`/`disconnect`. Eval and load-file input is syntax-checked
-and safely repaired first (via jolt-lsp's `jolt-lsp.syntax`). Since v0.3.0 the
+`nrepl_eval`, `nrepl_load_file`, `nrepl_lookup`, `nrepl_complete`,
+`nrepl_test`, and `nrepl_start`/`stop`/`connect`/`status`/`interrupt`/
+`disconnect`. Eval and load-file input is syntax-checked and safely repaired
+first (via jolt-lsp's `jolt-lsp.syntax`). Since v0.4.0 each top-level form is
+evaluated on its own with its own output and value, printing is capped
+(`*print-length*` 200, `*print-level*` 50) so infinite seqs return,
+`nrepl_test` returns clojure.test failures as data, `nrepl_status scan: true`
+lists running servers, and a `deps.edn` project without a server gets one
+started on first use. Since v0.3.0 the
 standalone `clj_check` and `clj_replace` tools are gone: use jolt-lsp's
 `jolt_check` and `jolt_replace_form`. It ships as a Claude Code plugin,
 `jolt-nrepl`, whose skill covers the workflow. Install it with

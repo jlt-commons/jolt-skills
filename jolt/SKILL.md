@@ -148,13 +148,19 @@ instead of repeated `jolt -e` runs: the session keeps vars, loaded namespaces
 and the current ns, so each step costs one eval, not a process start. Load the
 `jolt-nrepl` skill for the full workflow. In short:
 
-- `nrepl_start` (pass the project dir as `cwd`) starts or reuses the server;
-  `nrepl_eval` then connects lazily via `.nrepl-port`.
+- Pass the project dir as `cwd` on the first call. `nrepl_eval` connects via
+  `.nrepl-port` and starts a server for a `deps.edn` project that has none
+  (`nrepl_start` does it explicitly).
+- Each top-level form in an eval comes back with its own output and value;
+  printing is capped, so an infinite seq returns.
 - Try code in `nrepl_eval` first, then write it to the file and
   `nrepl_load_file` it. Edit forms with jolt-lsp's `jolt_replace_form`
   (`apply: true` writes), which matches by structure, not whitespace.
-- Run tests in the session: `(require 'x-test :reload) (clojure.test/run-tests 'x-test)`.
-  Still run the project's test task as the final gate.
+- Check an API with `nrepl_lookup` (arglists, doc, file:line) or
+  `nrepl_complete` before calling it.
+- Run tests in the session with `nrepl_test` (`ns: ["x-test"]` or single
+  `vars`): it reloads them and returns each failure's expected/actual. Still
+  run the project's test task as the final gate.
 - Debug by capturing values with an inline `(def x* x)` in a REPL-only
   redefinition, then inspect; don't add `println`. After an error: `*e`,
   `(ex-data *e)`.
