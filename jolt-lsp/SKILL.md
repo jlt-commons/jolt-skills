@@ -1,6 +1,6 @@
 ---
 name: jolt-lsp
-description: "Navigate, check and refactor Jolt/Clojure source through the jolt-lsp MCP tools (jolt_index, jolt_context, jolt_definition, jolt_references, jolt_hover, jolt_impact, jolt_diagnostics, jolt_check, jolt_replace_form, jolt_insert_form, jolt_rename, jolt_clean_ns, jolt_add_require, jolt_refactor, jolt_format, jolt_rename_namespace, jolt_extract, jolt_fix_declares, jolt_structural_diff). Use when working on Jolt or Clojure code and you need to find where something is defined or used, see what a change affects, check or repair syntax, make a structural edit that Edit can't match, rename a var or a namespace, move forms into a new namespace, fix a ns form, lint a file, or review what a change did form by form."
+description: "Navigate, check and refactor Jolt/Clojure source through the jolt-lsp MCP tools (jolt_index, jolt_context, jolt_definition, jolt_references, jolt_hover, jolt_impact, jolt_diagnostics, jolt_check, jolt_replace_form, jolt_insert_form, jolt_rename, jolt_clean_ns, jolt_add_require, jolt_refactor, jolt_format, jolt_rename_namespace, jolt_extract, jolt_fix_declares, jolt_structural_diff, jolt_deps_list, jolt_deps_grep, jolt_deps_read). Use when working on Jolt or Clojure code and you need to find where something is defined or used, see what a change affects, check or repair syntax, make a structural edit that Edit can't match, rename a var or a namespace, move forms into a new namespace, fix a ns form, lint a file, review what a change did form by form, or search and read the source of a dependency."
 ---
 
 # jolt-lsp tools
@@ -43,6 +43,9 @@ Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
 | `jolt_call_hierarchy` | `symbol`, `direction`: `callers` or `callees`. |
 | `jolt_impact` | Transitive callers of a var, with distance. Run before changing a public var. |
 | `jolt_deps` | `ns`, `direction`: `dependencies`, `dependents` or `cycles`. |
+| `jolt_deps_list` | The libraries the project resolves to (transitively): lib, version, kind and the directory their files are in. `pattern` filters names; `aliases` adds an alias's extra deps. |
+| `jolt_deps_grep` | Regex `pattern` over the dependencies' files (ripgrep when installed): `library` (group/artifact, group or artifact), `glob` (`*.clj`), `case_insensitive`, `files_only`, `limit` (default 50; `truncated` when cut). Hits give `lib`, `file`, `path`, `line`, `text`. |
+| `jolt_deps_read` | A dependency file by the `file` grep returned, or `library` + `path`; `offset`/`limit` for a line range. Paths outside the project's dependencies are refused. |
 | `jolt_diagnostics` | `file`, or none for the whole project. Unresolved symbols/namespaces, unused requires/refers/bindings/privates, duplicate requires, syntax errors; clj-kondo findings when installed (`kondo`). |
 | `jolt_check` | Syntax check of a `file` or `code`; `fix: true` applies only safe repairs. |
 | `jolt_replace_form` | `file`, `old_form`, `new_text`; `occurrence` or `all`. |
@@ -64,7 +67,9 @@ Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
 2. `jolt_context` on the namespace you're changing; `jolt_hover` for a var's
    source rather than reading the whole file.
 3. `jolt_impact` (or `jolt_references`) before changing a public var's
-   signature or behaviour.
+   signature or behaviour. To see how a library does something, or what a
+   dependency's function really expects, `jolt_deps_grep` its sources and
+   `jolt_deps_read` the hit instead of guessing from memory.
 4. Reproduce and try the fix in the REPL (`jolt-nrepl` skill), then write it.
 5. Write with `jolt_replace_form` / `jolt_insert_form` / `jolt_rename` /
    `jolt_refactor`: preview, check the diff, `apply: true`. Plain Edit is fine

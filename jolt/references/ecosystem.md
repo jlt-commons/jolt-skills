@@ -440,7 +440,9 @@ and cycles, forms, context packs, syntax check/repair, rename, clean-ns,
 add-require, structural replace/insert, refactors (sort-requires,
 inline-symbol, destructure-keys, move-form, …), namespace rename with file
 moves, extraction into a new namespace, declare cleanup, structural diff
-(against text or a git revision), cljfmt formatting, and batch reads. As a
+(against text or a git revision), cljfmt formatting, batch reads, and (since
+v0.3.0) listing, grepping and reading the sources of the project's
+dependencies (`jolt_deps_list`/`_grep`/`_read`). As a
 library: `jolt-lsp.api`, `jolt-lsp.syntax` (check and repair),
 `jolt-lsp.surgeon` (restructuring plans) and `jolt-lsp.sdiff` (structural
 diff); EPL-2.0 with GPL-2.0-or-later as a Secondary License. Edits preview as diffs and need `apply: true`. Register with
