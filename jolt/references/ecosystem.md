@@ -170,7 +170,7 @@ Use babashka.cli for new code. There is no jolt fork of tools.cli; upstream
 | jolt-lang/nrepl | nREPL middleware + cider ops + client | yes | y |
 | jlt-commons/jolt-nrepl-mcp | MCP server: agent in a persistent nREPL | yes | y |
 | jlt-commons/jolt-lsp | LSP + MCP server + JSON CLI: navigation, diagnostics, refactors | yes | y |
-| jlt-commons/nrepl-kimi-code-plugin | same, for Kimi Code | no | y |
+| jlt-commons/nrepl-kimi-code-plugin | Kimi Code plugin: registers the installed jolt-nrepl-mcp and jolt-lsp, with their skills | no | y |
 | jlt-commons/setup-jolt, ci-builds | CI (above) | yes (`v1`) / no | CI |
 | jlt-commons/docs-engine | static-site generator for project docs | yes | y |
 | jlt-commons/awesome-jolt | curated list (~160 links) | no | - |
@@ -423,12 +423,16 @@ evaluated on its own with its own output and value, printing is capped
 (`*print-length*` 200, `*print-level*` 50) so infinite seqs return,
 `nrepl_test` returns clojure.test failures as data, `nrepl_status scan: true`
 lists running servers, and a `deps.edn` project without a server gets one
-started on first use. Since v0.3.0 the
+started on first use. Since v0.4.1 a call that names no project is refused
+instead of acting on a plugin's install directory, and `nrepl_start` is
+refused while an eval runs. Since v0.3.0 the
 standalone `clj_check` and `clj_replace` tools are gone: use jolt-lsp's
 `jolt_check` and `jolt_replace_form`. It ships as a Claude Code plugin,
 `jolt-nrepl`, whose skill covers the workflow. Install it with
 `claude plugin marketplace add <checkout> && claude plugin install jolt-nrepl@jolt-nrepl-mcp`.
-Release binaries don't need jolt installed.
+Release binaries don't need jolt installed. For Kimi Code, put the
+`jolt-nrepl-mcp` and `jolt-lsp` binaries on `PATH` and
+`/plugins install` a checkout of jlt-commons/nrepl-kimi-code-plugin.
 
 ### jolt-lsp
 
@@ -445,9 +449,12 @@ v0.3.0) listing, grepping and reading the sources of the project's
 dependencies (`jolt_deps_list`/`_grep`/`_read`). As a
 library: `jolt-lsp.api`, `jolt-lsp.syntax` (check and repair),
 `jolt-lsp.surgeon` (restructuring plans) and `jolt-lsp.sdiff` (structural
-diff); EPL-2.0 with GPL-2.0-or-later as a Secondary License. Edits preview as diffs and need `apply: true`. Register with
-`claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp`; release
-binaries for macOS arm64 and Linux x86_64. See the `jolt-lsp` skill.
+diff); EPL-2.0 with GPL-2.0-or-later as a Secondary License. Edits preview as diffs and need `apply: true`. Since
+v0.3.2 a call without `root` uses the project of an absolute `file`, then the
+last root, and never a plugin's install directory. Register with
+`claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp` (Kimi Code:
+nrepl-kimi-code-plugin); release binaries for macOS arm64 and Linux x86_64.
+See the `jolt-lsp` skill.
 
 ### docs-engine, awesome-jolt, clojure-test-suite
 

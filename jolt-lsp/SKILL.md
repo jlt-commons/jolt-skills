@@ -13,7 +13,8 @@ when it runs. Jolt only: `.clj`, `.cljc`, `.edn`. No ClojureScript, no Java
 navigation.
 
 Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
-`claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp`.
+`claude mcp add --scope user jolt-lsp -- /path/to/jolt-lsp mcp`. In Kimi Code,
+the nrepl-kimi-code-plugin registers it (with jolt-nrepl-mcp) from `PATH`.
 
 ## Conventions
 
@@ -21,7 +22,10 @@ Source and releases: https://github.com/jlt-commons/jolt-lsp. Register it with
   `end-line`, `end-col` (end exclusive), plus `source` text.
 - A symbol may be a fqn (`app.core/run`) or a bare name. An ambiguous bare
   name returns `ok: false` with `candidates`; retry with the fqn.
-- Paths may be relative to `root`. Pass `root` on the first call.
+- Pass `root` (the project's absolute path) on the first call, or an absolute
+  `file`, whose project is used; later calls reuse that project. Paths may be
+  relative to `root`. A server started outside the project (Kimi starts it in
+  the plugin's directory) refuses a call that names no project: pass `root`.
 - The index follows the disk: files changed by any tool (Edit included) are
   re-read on the next call. `refresh: true` on `jolt_index` rebuilds.
 - **Edits preview by default.** The result has a `diff` per file. Read it, then

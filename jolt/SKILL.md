@@ -41,8 +41,9 @@ Reference files in this skill:
    alive, there is no `-Xmx` (it's `JOLT_MAX_HEAP`), the stack is deep (millions
    of frames), strings are codepoint-indexed, regex is irregex behind a
    Java-grammar translator. If a diagnosis needs JVM semantics, it is wrong.
-3. **Check, don't guess.** `jolt -e '...'` answers "does X exist/work here" in a
-   fraction of a second. `(resolve 'ns/sym)`, `(System/getProperty "jolt.version")`,
+3. **Check, don't guess.** In a project, ask the nREPL session (`nrepl_eval`,
+   `nrepl_lookup`; see REPL-driven work); outside one, `jolt -e '...'` answers
+   "does X exist/work here" in a fraction of a second. `(resolve 'ns/sym)`, `(System/getProperty "jolt.version")`,
    `jolt -Spath`, `jolt -Stree`. Read the jolt source when in doubt:
    https://github.com/jolt-lang/jolt/tree/main/host/chez/java/ holds the shims, `stdlib/` the libs.
 4. **Pin versions from the source, never from memory.** For a git dep, resolve
