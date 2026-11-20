@@ -34,13 +34,13 @@ cp -R jolt-skills/jolt* jolt-skills/clj-refactor ~/.kimi-code/skills/
 Or per project, into `.kimi-code/skills/`. `jolt-nrepl` needs the jolt-nrepl MCP
 server and `jolt-lsp` needs the jolt-lsp MCP server (`jolt-lsp mcp`); see their
 repos for setup. In Kimi Code, the
-[nrepl-kimi-code-plugin](https://github.com/jlt-commons/nrepl-kimi-code-plugin)
+[jolt-kimi-plugin](https://github.com/jlt-commons/jolt-kimi-plugin)
 registers both servers from `PATH` and ships `jolt-nrepl` and `jolt-lsp`.
 
 ## One copy of each skill
 
 This repo is the source for every skill here. jolt-nrepl-mcp ships
-`jolt-nrepl` and `clj-refactor`, and nrepl-kimi-code-plugin ships those plus
+`jolt-nrepl` and `clj-refactor`, and jolt-kimi-plugin ships those plus
 `jolt-lsp`; their copies are written from here. Edit the skill in this repo,
 then run `./sync.sh` with the plugins checked out alongside (`./sync.sh
 --check` fails if a copy has drifted).

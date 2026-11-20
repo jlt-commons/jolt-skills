@@ -31,5 +31,5 @@ ship() { # ship <plugin-dir> <skill>...
 }
 
 ship jolt-nrepl-mcp jolt-nrepl clj-refactor
-ship kimi-nrepl-plugin jolt-nrepl jolt-lsp clj-refactor
+ship jolt-kimi-plugin jolt-nrepl jolt-lsp clj-refactor
 exit $status
