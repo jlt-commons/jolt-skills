@@ -144,35 +144,13 @@ For completion/lookup middleware, add `jolt-lang/nrepl`
 which returns a stop fn.
 
 **Work through the REPL yourself.** For anything iterative, use the
-`jolt-nrepl` MCP tools (plugin source: https://github.com/jlt-commons/jolt-nrepl-mcp)
+`jolt-nrepl` MCP tools (https://github.com/jlt-commons/jolt-nrepl-mcp)
 instead of repeated `jolt -e` runs: the session keeps vars, loaded namespaces
-and the current ns, so each step costs one eval, not a process start. Load the
-`jolt-nrepl` skill for the full workflow. In short:
-
-- Pass the project dir as `cwd` on the first call. `nrepl_eval` connects via
-  `.nrepl-port` and starts a server for a `deps.edn` project that has none
-  (`nrepl_start` does it explicitly).
-- Each top-level form in an eval comes back with its own output and value;
-  printing is capped, so an infinite seq returns.
-- Try code in `nrepl_eval` first, then write it to the file and
-  `nrepl_load_file` it. Edit forms with jolt-lsp's `jolt_replace_form`
-  (`apply: true` writes), which matches by structure, not whitespace.
-- Check an API with `nrepl_lookup` (arglists, doc, file:line) or
-  `nrepl_complete` before calling it.
-- Run tests in the session with `nrepl_test` (`ns: ["x-test"]` or single
-  `vars`): it reloads them and returns each failure's expected/actual. Still
-  run the project's test task as the final gate.
-- Debug by capturing values with an inline `(def x* x)` in a REPL-only
-  redefinition, then inspect; don't add `println`. After an error: `*e`,
-  `(ex-data *e)`.
-- Discover APIs with `clojure.repl/doc`, `apropos`, `dir`, `find-doc`,
-  `(meta #'ns/f)` and `macroexpand-1`. There is no `clojure.repl/source`.
-- A dropped trailing paren is auto-closed and reported; other syntax problems
-  come back with line/col before anything runs. jolt-lsp's `jolt_check` does
-  the same for a file (`fix: true` writes safe repairs).
-- The built-in server has no `interrupt`; a timed-out eval drops the
-  connection and may still be running. Add `nrepl.middleware/default-middleware`
-  for interrupt. Timed-out forms are never replayed.
+and the current ns, so each step costs one eval, not a process start. Load
+the `jolt-nrepl` skill for the workflow: reproduce and try a fix in
+`nrepl_eval`, then write the file, `nrepl_load_file` it and `nrepl_test`;
+capture values instead of adding `println`; cold-load before committing.
+For a bug whose cause isn't obvious, load `jolt-debug`.
 
 For navigation and edits, use the `jolt-lsp` MCP tools
 (https://github.com/jlt-commons/jolt-lsp; load the `jolt-lsp` skill):
@@ -182,6 +160,7 @@ For navigation and edits, use the `jolt-lsp` MCP tools
 diff, then `apply: true`), `jolt_rename_namespace` / `jolt_extract` /
 `jolt_fix_declares` to restructure namespaces, `jolt_diagnostics` after
 writing a file, and `jolt_structural_diff` to review a change form by form.
+For a style pass against a written guide, load `jolt-style`.
 
 ## Choosing libraries
 

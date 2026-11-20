@@ -22,13 +22,16 @@ remembered. The server's `.nrepl-port` is found in `cwd` or any parent.
 | `nrepl_lookup` | Arglists, docstring and file:line of a var (`sym`, optional `ns`; aliases work). |
 | `nrepl_complete` | Vars/namespaces starting with a `prefix`. |
 | `nrepl_test` | Run clojure.test: `ns` (reloaded first) or `vars`. Counts, then each FAIL/ERROR with var, line, testing context, expected, actual. |
-| `nrepl_start` / `nrepl_stop` | Start (or reuse) `jolt nrepl-server` for the nearest `deps.edn`; stop one it started. |
+| `nrepl_start` / `nrepl_stop` | Start (or reuse) `jolt nrepl-server` for the nearest `deps.edn`; stop one it started. Starts with `-A:test` when `deps.edn` has a `:test` alias; `aliases` picks others (`[]` for none), `command` another launcher. |
 | `nrepl_status` | Connection, ns, print caps, ops. `scan: true` lists every nREPL server running on the machine with its directory. |
 | `nrepl_interrupt`, `nrepl_disconnect`, `nrepl_connect` | Housekeeping. |
 
-A project with a `deps.edn` and no server (or a stale `.nrepl-port`) gets one
-started on the first call; the result says `started nREPL …`. Without a
-`deps.edn`, run `nrepl_start` yourself, or find a running server with
+A Jolt project (its `deps.edn` mentions jolt or jlt-commons, or has `:tasks`)
+with no server (or a stale `.nrepl-port`) gets one started on the first call;
+the result says `started nREPL …`. Any other project is left alone, because
+`jolt nrepl-server` would be the wrong runtime for a JVM project: start its own
+server (the tools connect to a JVM nREPL too). Without a `deps.edn`, or to
+start a Jolt server anyway, run `nrepl_start` yourself, or find a running server with
 `nrepl_status` `scan: true` and `nrepl_connect` to its port.
 
 Printing is capped (`*print-length*` 200, `*print-level*` 50), so `(range)`
@@ -111,6 +114,35 @@ More inspection moves:
 - State held in a running system (Integrant/mount/atoms) does not pick up a
   redefinition captured in a closure: restart that component, or re-run the
   code path, after reloading.
+
+## Keep the session and the files in step
+
+The session drifts from the files: a REPL-only redefinition, a capture def,
+a var whose defn was since deleted or renamed (it stays interned), a
+namespace loaded with `load-file` from a path the server's source roots do
+not have. Each makes something work in the session that a fresh process
+will not reproduce. Before calling work done or committing:
+
+1. **Cold load.** `jolt -e "(require 'my.ns)"` (or `jolt -M:test -e ...` for
+   a test namespace) in a fresh process, for every namespace you changed.
+2. **Read the diff.** Check the files say what you tested: `git diff`, or
+   jolt-lsp's `jolt_structural_diff` against `HEAD`.
+3. **Run the project's test task** (`jolt test`), not only `nrepl_test`.
+
+`nrepl_test` and `(require ... :reload)` read from the server's source
+roots. When a namespace was loaded some other way and its file is not on
+them (a server started without the `:test` alias, then a test file loaded by
+path), the reload finds nothing and the old definitions run. If a test you
+just added is missing from the counts, restart the server with the right
+`aliases` (`nrepl_start`) or `nrepl_load_file` the file.
+
+## Make the running system reachable
+
+State a closure holds cannot be inspected from the REPL. Keep a running
+system in a top-level `(defonce system (atom nil))` that the start function
+`reset!`s (Integrant's `ig/init`, mount, or your own), so the session can
+`(keys @system)`, snapshot a component with `(def snap @(:db @system))`, and
+test pure functions against the snapshot without touching the live system.
 
 ## Discover before writing
 
