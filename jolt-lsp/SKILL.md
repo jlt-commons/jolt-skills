@@ -116,14 +116,26 @@ broken file still indexes: the broken top-level form is masked and
 
 ## Project settings
 
-`.jolt-lsp/config.edn` (and `.clj-kondo/config.edn` for `:lint-as` and
-`:unresolved-symbol {:exclude ...}`):
+Lint config follows clj-kondo's shape and is read from
+`.clj-kondo/config.edn` and `.jolt-lsp/config.edn` (jolt-lsp's wins). No
+clj-kondo binary is needed. `.jolt-lsp/config.edn` also takes jolt-lsp's
+own settings:
 
 ```clojure
-{:kondo true                 ; nil = on when clj-kondo is installed
+{:lint-as {my.ns/defthing clojure.core/def}
+ :linters {:unused-private-var {:level :off}
+           :discouraged-var {:presets [:security]          ; eval, read-string, load-file ...
+                             my.app/old-fn {:message "use my.app/new-fn"}}}
+ :config-in-ns {my.app.repl {:linters {:discouraged-var {clojure.core/eval {:level :off}}}}}
  :custom-linters [{:file "linters/my.clj" :fn "my.linters/analyze"}]
  :clj-depend {:rules [{:from "app.ui.*" :to "app.db.*"}]}}
 ```
 
 A macro that defines vars or binds names will show up as unresolved symbols
 until it is mapped with `:lint-as` (e.g. `{my.ns/defthing clojure.core/def}`).
+
+`jolt-lsp lint --root .` lints the whole project and exits 1 at
+`--fail-level` (`error` by default), for CI. In Claude Code, the
+[jolt-claude-plugin](https://github.com/jlt-commons/jolt-claude-plugin) runs
+`check --fix` and the file's diagnostics after every write, blocking on
+errors, so you see a broken file at once.
