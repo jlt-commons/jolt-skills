@@ -133,7 +133,10 @@ They must also agree on result type and on which arguments they take.
 (defextern ^long next-seed [^long s] {:c "xs_next" :header "xorshift.h"})
 ```
 
-- Scalars only: `^long ^double ^boolean` in and out; no result hint means void.
+- Scalars `^long ^double ^boolean`; no result hint means void. Array params
+  `^doubles`/`^longs` arrive in C as `(double *xs, int64_t n)` /
+  `(int64_t *xs, int64_t n)`, valid for the call only. A borrowed `^longs`
+  region param must be passed as `(aclone xs)` (it is stored as fixnums).
 - Declared from the hints, or `#include`d via `:header` (`"x.h"` or
   `"<math.h>"`). Use `:header` for anything libc/libm already declares, so the
   prototype can't conflict (`int64_t` is `long long` on macOS, `long` on Linux).
@@ -160,7 +163,8 @@ Both are memory safe. The choice is what other threads' GC does while the C runs
   Write the natural `(< i (alength xs))` loop; don't hand-hoist bounds.
 - A constant-size array of up to 256 elements that stays in the function (not
   returned, not carried by `recur`, not taken by a helper) lives on the C stack.
-  A scratch `(double-array 3)` inside a loop costs no allocation.
+  A scratch `(double-array 3)` inside a loop costs no allocation, and if it is
+  only indexed by constants it becomes plain C variables (registers).
 
 ## Semantics that differ from plain Jolt
 
