@@ -70,7 +70,8 @@ Everything inside is inferred. Do not add hints inside the body.
 - `long`, `double`
 - `aget`, `aset`, `alength`; `double-array`, `long-array`, `aclone` create arrays the region **owns**
 - `Math/sqrt`, `sin`, `cos`, `tan`, `exp`, `log`, `floor`, `ceil`, `pow`, `atan2`
-- your own macros (they expand inside the region) and `defnative` helpers
+- your own macros (they expand inside the region), `defnative` helpers, and C
+  functions declared with `defextern`
 
 Nothing else: no maps, vectors, seqs, strings, closures, `fn`, interop, or calls
 to ordinary functions. No destructuring in `let`/`loop`. Do the non-numeric work
@@ -112,6 +113,35 @@ helper calls borrow it. When the owner's scope ends the array is freed.
   caller's binding is moved. This is inferred; nothing is annotated.
 - Outside a region the name is an ordinary function over the same body.
 
+A helper can give a body per platform, chosen by the C compiler:
+
+```clojure
+(defnative sum [xs]
+  (on "defined(__aarch64__)" ...)
+  (on :default ...))
+```
+
+The first guard (a C preprocessor condition) that holds is compiled; with no
+`:default`, an uncovered platform fails the build. The Jolt fallback runs the
+`:default` body (or the first), so the bodies must compute the same thing.
+They must also agree on result type and on which arguments they take.
+
+## Calling C: defextern
+
+```clojure
+(defextern ^double fast-erf [^double x])
+(defextern ^long next-seed [^long s] {:c "xs_next" :header "xorshift.h"})
+```
+
+- Scalars only: `^long ^double ^boolean` in and out; no result hint means void.
+- Declared from the hints, or `#include`d via `:header` (`"x.h"` or
+  `"<math.h>"`). Use `:header` for anything libc/libm already declares, so the
+  prototype can't conflict (`int64_t` is `long long` on macOS, `long` on Linux).
+- The fallback and plain Jolt call the same function through `jolt.ffi`.
+- `jolt build` links it: it must come from a `:static` `:jolt/native` entry (or
+  libc/libm). A dynamic-only library links under `jolt run` but not in a binary.
+- The checker can't see into C: the region is only as safe as the function.
+
 ## Pinned (default) vs ^:hold-gc
 
 Both are memory safe. The choice is what other threads' GC does while the C runs.
@@ -121,6 +151,16 @@ Both are memory safe. The choice is what other threads' GC does while the C runs
 - `(native ^:hold-gc [^double x] (* x x))`: a plain call, about 2.5ns, that
   holds every other thread's collection until the region returns. Only for
   regions that finish in microseconds; a long one stalls the whole process's GC.
+
+## What the compiler does for you
+
+- Checks it can prove never fire are dropped: loop counters, `(< i (alength a))`
+  scans, indexes built from them. Facts that depend on an array argument's
+  length run behind one guard, so a short array still gets the exact exception.
+  Write the natural `(< i (alength xs))` loop; don't hand-hoist bounds.
+- A constant-size array of up to 256 elements that stays in the function (not
+  returned, not carried by `recur`, not taken by a helper) lives on the C stack.
+  A scratch `(double-array 3)` inside a loop costs no allocation.
 
 ## Semantics that differ from plain Jolt
 
@@ -151,6 +191,9 @@ Every message starts `native region:`.
 | `loop iteration` ... gives away an outer value | move only on the exit path, or `aclone` |
 | `not allowed in a native region: f` | not in the subset; compute it outside and pass it in, or write a `defnative` |
 | `native helper f never returns` | the helper needs a base case that doesn't recurse |
+| `platform bodies return different types` / `take different arguments` | make every `(on ...)` body agree |
+| `f takes :long here, got :double` (a `defextern`) | convert with `(long x)`; a long passes where C takes a double |
+| build error `... Not Supported on This Platform` | add an `(on :default ...)` body |
 
 ## Testing and checking it runs as C
 
