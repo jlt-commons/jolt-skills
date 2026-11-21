@@ -216,6 +216,8 @@ in a `myapp.shims` namespace required first.
 - Performance: build strings with `StringBuilder` or `str/join`, not `str` in a
   loop; use `(?:…)` for groups you don't read; prefer literal keyword maps; use
   `^double`/`^long` hints or casts in numeric hot paths (see `performance-idioms.md`).
+  A numeric array loop that is still too slow can become a native region
+  compiled to C by `jolt build` (`jolt.native`; see the `jolt-native` skill).
 - Diagnostics: `JOLT_DIAG=edn` (machine-readable errors), `JOLT_CHECK=1` (type
   lint), `JOLT_DEBUG=1` (dep resolution), `JOLT_WARNINGS=1`, `JOLT_TRACE=0`
   (turn off source-mode tracing for microbenchmarks), `JOLT_GC_LOG=1`.
