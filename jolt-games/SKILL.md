@@ -24,6 +24,7 @@ which calls the system `libraylib` directly. No codegen, no C shim.
 | iPhone / Android | **raylib-ios**, **raylib-android** | separate toolchains, own bindings. `references/mobile.md` |
 | Scripting a Blender/UPBGE scene or game | **upbge-jolt** | has its own skill: `skills/upbge-jolt/SKILL.md` in that repo |
 | Hot per-frame numeric code | plain Clojure + hints + primitive arrays | `references/perf.md`. `primitive-math` is for API compatibility, not speed |
+| A physics/particle step still too slow after that | a `jolt.native` region (compiled to C) | the `jolt-native` skill |
 
 Worked example of a whole game: `jlt-commons/graviton` (pure world + input
 snapshot + render + a trimmed raylib binding of its own, with writ specs). 187
