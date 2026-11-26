@@ -385,11 +385,15 @@ Checked (library and `--string`).
 ### jolt-metrics
 
 Complexity, Halstead, maintainability, coupling and git hotspots for
-Clojure/jolt/Scheme, led by a ranked refactoring queue. To work on the
-library, load the **`jolt-metrics` skill** (`~/.claude/skills/jolt-metrics/`).
-To use it, run `jolt -m metrics.cli src [report.html|--format json|edn] [--top N] [--no-git]`
-from a checkout of its newest tag, or the
-release binary `jolt-metrics`. Checked with `--no-git --top 3`.
+Clojure/jolt/Scheme, led by a ranked refactoring queue, plus lint findings
+(clj-kondo's syntactic rules and its own rules for needless work, such as
+copying a vector to pop it in a loop). To work on the library, load the
+**`jolt-metrics` skill** (`~/.claude/skills/jolt-metrics/`). To use it, run
+`jolt -m metrics.cli src [report.html|--format json|edn] [--top N] [--no-git]`
+from a checkout of its newest tag, or the release binary `jolt-metrics`. To
+check a refactor, save `--format edn` before it and pass that file with
+`--baseline` after: the report opens with what was fixed, improved, got worse
+or is new. Checked with `--no-git --top 3`.
 
 ### jolt-lang/nrepl
 
