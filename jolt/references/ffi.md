@@ -9,6 +9,23 @@ jolt has no `java.*` for the outside world, so C is reached directly. The layer
 is thin and explicit: you declare the library, type each function, and manage
 foreign memory yourself (no finalizers).
 
+## jolt.ffi, defextern or a native region?
+
+- **`jolt.ffi`** (this file): any C API. Strings, pointers, handles, structs,
+  callbacks, blocking calls, shared libraries loaded at runtime.
+- **`jolt.native/defextern`**: a C function that takes and returns only
+  numbers (`^long ^double ^boolean`, or `^doubles`/`^longs` arrays). From
+  plain Clojure it is the same `defcfn` call at the same cost, and native
+  regions can call it directly. In a `jolt build` binary it must be statically
+  linked (libc/libm or a `:static` lib). E.g.
+  `(defextern ^double cbrt [^double x] {:header "<math.h>"})`.
+- **A native region** (`jolt.native/native`): when the hot part is a numeric
+  loop over arrays, write the loop in a region instead of calling C per
+  element; it compiles to C and calls `defextern` functions with no
+  marshalling.
+
+The `jolt-native` skill covers `defextern` and regions in full.
+
 ## 1. Declare the library in deps.edn
 
 ```clojure

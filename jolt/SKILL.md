@@ -24,7 +24,8 @@ Read the relevant doc page before guessing:
 
 Reference files in this skill:
 - `references/deps-and-tasks.md`: deps.edn keys, coordinates, aliases, tasks
-- `references/ffi.md`: binding C, memory, structs, callbacks, shipping your own C
+- `references/ffi.md`: binding C, memory, structs, callbacks, shipping your own C;
+  when to use `jolt.ffi` vs `defextern` vs a native region
 - `references/build.md`: `jolt build`, binary modes, static natives, resources, CI
 - `references/differences.md`: where jolt differs from JVM Clojure, and what is shimmed
 - `references/ecosystem.md`: every jolt-lang / jlt-commons library, its require, coordinate and domain skill
@@ -217,7 +218,8 @@ in a `myapp.shims` namespace required first.
   loop; use `(?:…)` for groups you don't read; prefer literal keyword maps; use
   `^double`/`^long` hints or casts in numeric hot paths (see `performance-idioms.md`).
   A numeric array loop that is still too slow can become a native region
-  compiled to C by `jolt build` (`jolt.native`; see the `jolt-native` skill).
+  compiled to C (`jolt.native`: linked in by `jolt build`, JIT-compiled under
+  `jolt run` and in the REPL; see the `jolt-native` skill).
 - Diagnostics: `JOLT_DIAG=edn` (machine-readable errors), `JOLT_CHECK=1` (type
   lint), `JOLT_DEBUG=1` (dep resolution), `JOLT_WARNINGS=1`, `JOLT_TRACE=0`
   (turn off source-mode tracing for microbenchmarks), `JOLT_GC_LOG=1`.
@@ -236,4 +238,6 @@ in a `myapp.shims` namespace required first.
 4. If the project ships a binary, build it (`jolt build …`) and run it after any
    change that touches natives, resources, `require`s computed at runtime, or
    `resolve`: a source run can pass where the closed-world binary fails.
-5. For any FFI work, read `references/ffi.md` first.
+5. For any FFI work, read `references/ffi.md` first. For a numeric C function
+   or a hot numeric loop, also load the `jolt-native` skill (`defextern`,
+   native regions).

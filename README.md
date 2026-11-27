@@ -14,7 +14,7 @@ Agent skills for building apps on [Jolt](https://jolt-lang.net) with the jolt-la
 | `jolt-data` | Persistence and formats: db (SQLite/Postgres, next.jdbc, honeysql, migratus), doltera, duratom, time/tick, JSON/EDN/YAML/XML/Transit/Fressian, instaparse |
 | `jolt-gui` | Desktop, terminal and mobile UIs: glimmer and its backends, glitter + nexus, ftxui |
 | `jolt-games` | Games and graphics: raylib-jlt, raygui, ents (flecs), slipstream, raylib on iOS/Android, per-frame performance |
-| `jolt-native` | Native regions: numeric hot loops compiled to C by `jolt build` with `jolt.native`, borrow-checked ownership, helpers, pinned vs `^:hold-gc` calls, compile errors and fixes |
+| `jolt-native` | Native regions: numeric hot loops compiled to C with `jolt.native` (linked by `jolt build`, JIT-compiled by MIR under `jolt run`), borrow-checked ownership, helpers, `defextern` vs `jolt.ffi`, `:specialize`, `native-fn`, binary layouts, pinned vs `^:hold-gc` calls, compile errors and fixes |
 | `jolt-concurrency` | Futures, core.async, jolt.fibers, ebb, ensemble actors, tapestry, lifecycle and shutdown |
 
 Each skill is a directory with a `SKILL.md` and optional `references/`. The
